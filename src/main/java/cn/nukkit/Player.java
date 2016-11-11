@@ -2614,6 +2614,14 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                                         this.setDataFlag(DATA_FLAGS, DATA_FLAG_RIDING, false);
                                         break;
                                 }
+                            } else {
+                                if (targetEntity.getNetworkId() == 14) { // interact with wolf ...
+                                    EntityInteractEvent entityInteractEvent = new EntityInteractEvent(targetEntity, this);
+                                    this.server.getPluginManager().callEvent(entityInteractEvent);
+                                    if (ev.isCancelled()) {
+                                        break;
+                                    }
+                                }
                             }
 
                             EntityDamageByEntityEvent entityDamageByEntityEvent = new EntityDamageByEntityEvent(this, targetEntity, EntityDamageEvent.CAUSE_ENTITY_ATTACK, damage);
