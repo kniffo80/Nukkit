@@ -2580,10 +2580,14 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                     if (targetEntity instanceof Player && !((boolean) this.server.getConfig("pvp", true))) {
                         cancelled = true;
                     }
+                    
+                    int action = ((InteractPacket) packet).action;
 
-                    if (((InteractPacket) packet).action == InteractPacket.ACTION_MOUSEOVER) {
+                    if (action == InteractPacket.ACTION_MOUSEOVER) {
                         this.getServer().getPluginManager().callEvent(new PlayerMouseOverEntityEvent(this, targetEntity));
-                    } else {
+                    } else if (action == InteractPacket.ACTION_RIGHT_CLICK) {
+                        this.getServer().getPluginManager().callEvent(new PlayerMouseRightEntityEvent(this, targetEntity));
+                    } else if (action == InteractPacket.ACTION_LEFT_CLICK) {
                         if (targetEntity != null && this.isAlive() && targetEntity.isAlive()) {
                             if (this.getGamemode() == Player.VIEW) {
                                 cancelled = true;
@@ -2656,14 +2660,6 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                                         ((EntityVehicle) targetEntity).linkedEntity = null;
                                         this.setDataFlag(DATA_FLAGS, DATA_FLAG_RIDING, false);
                                         break;
-                                }
-                            } else {
-                                if (targetEntity.getNetworkId() == 14) { // interact with wolf ...
-                                    EntityInteractEvent entityInteractEvent = new EntityInteractEvent(targetEntity, this);
-                                    this.server.getPluginManager().callEvent(entityInteractEvent);
-                                    if (ev.isCancelled()) {
-                                        break;
-                                    }
                                 }
                             }
 
