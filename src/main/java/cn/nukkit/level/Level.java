@@ -1286,7 +1286,7 @@ public class Level implements ChunkManager, Metadatable {
             for (int x = minX; x <= maxX; ++x) {
                 for (int y = minY; y <= maxY; ++y) {
                     Block block = this.getBlock(this.temporalVector.setComponents(x, y, z));
-                    if (!block.canPassThrough() && block.collidesWithBB(bb)) {
+                    if (block != null && bb != null && !block.canPassThrough() && block.collidesWithBB(bb)) {
                         collides.add(block.getBoundingBox());
                     }
                 }
